@@ -8,6 +8,7 @@ bot.add('/', new builder.CommandDialog()
     .onDefault([
         function (session, args, next) {
             if (!session.userData.name) {
+                context.log(context);
                 session.beginDialog('/profile');
             } else {
                 next();
