@@ -1,8 +1,3 @@
-/*-----------------------------------------------------------------------------
-This template demonstrates how to use Waterfalls to collect input from a user using a sequence of steps.
-For a complete walkthrough of creating this type of bot see the article at
-https://aka.ms/abs-node-waterfall
------------------------------------------------------------------------------*/
 "use strict";
 var builder = require("botbuilder");
 var botbuilder_azure = require("botbuilder-azure");
@@ -16,11 +11,6 @@ var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure
     openIdMetadata: process.env['BotOpenIdMetadata']
 });
 
-/*----------------------------------------------------------------------------------------
-* Bot Storage: This is a great spot to register the private state storage for your bot. 
-* We provide adapters for Azure Table, CosmosDb, SQL Azure, or you can implement your own!
-* For samples and documentation, see: https://github.com/Microsoft/BotBuilder-Azure
-* ---------------------------------------------------------------------------------------- */
 
 var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
@@ -50,13 +40,5 @@ bot.dialog('/', [
     }
 ]);
 
-if (useEmulator) {
-    var restify = require('restify');
-    var server = restify.createServer();
-    server.listen(3978, function() {
-        console.log('test bot endpont at http://localhost:3978/api/messages');
-    });
-    server.post('/api/messages', connector.listen());    
-} else {
-    module.exports = connector.listen();
-}
+module.exports = connector.listen();
+
