@@ -1,65 +1,62 @@
-var builder = require('botbuilder');
-var bot = new builder.BotConnectorBot();
+/*-----------------------------------------------------------------------------
+This template demonstrates how to use Waterfalls to collect input from a user using a sequence of steps.
+For a complete walkthrough of creating this type of bot see the article at
+https://aka.ms/abs-node-waterfall
+-----------------------------------------------------------------------------*/
+"use strict";
+var builder = require("botbuilder");
+var botbuilder_azure = require("botbuilder-azure");
+var path = require('path');
 
-// Handle "root" requests
-bot.add('/', new builder.CommandDialog()
-    .matches('^set name', builder.DialogAction.beginDialog('/profile'))
-    .matches('^quit', builder.DialogAction.endDialog())
-    .onDefault([
-        function (session, args, next) {
-            if (!session.userData.name) {
-                context.log(context);
-                session.beginDialog('/profile');
-            } else {
-                next();
-            }
-        },
-        function (session, results) {
-            session.send('Hello %s!', session.userData.name);
-        }
-    ])
-);
+var useEmulator = (process.env.NODE_ENV == 'development');
 
-// Handle "profile" requests
-bot.add('/profile', [
+var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure.BotServiceConnector({
+    appId: process.env['MicrosoftAppId'],
+    appPassword: process.env['MicrosoftAppPassword'],
+    openIdMetadata: process.env['BotOpenIdMetadata']
+});
+
+/*----------------------------------------------------------------------------------------
+* Bot Storage: This is a great spot to register the private state storage for your bot. 
+* We provide adapters for Azure Table, CosmosDb, SQL Azure, or you can implement your own!
+* For samples and documentation, see: https://github.com/Microsoft/BotBuilder-Azure
+* ---------------------------------------------------------------------------------------- */
+
+var tableName = 'botdata';
+var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
+var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azureTableClient);
+
+var bot = new builder.UniversalBot(connector);
+bot.localePath(path.join(__dirname, './locale'));
+bot.set('storage', tableStorage);
+
+bot.dialog('/', [
     function (session) {
-        if (session.userData.name) {
-            builder.Prompts.text(session, 'What would you like to change it to?');
-        } else {
-            builder.Prompts.text(session, 'Hi! What is your name?');
-        }
+        builder.Prompts.text(session, "Hello... What's your name?");
     },
     function (session, results) {
         session.userData.name = results.response;
-        session.endDialog();
+        builder.Prompts.number(session, "Hi " + results.response + ", How many years have you been coding?"); 
+    },
+    function (session, results) {
+        session.userData.coding = results.response;
+        builder.Prompts.choice(session, "What language do you code Node using?", ["JavaScript", "CoffeeScript", "TypeScript"]);
+    },
+    function (session, results) {
+        session.userData.language = results.response.entity;
+        session.send("Got it... " + session.userData.name + 
+                    " you've been programming for " + session.userData.coding + 
+                    " years and use " + session.userData.language + ".");
     }
-]
-);
+]);
 
-// On error, swallow them (TODO: Fix this...)
-bot.on('error', function (message) {
-    console.log(message);
-})
-
-
-// Below is mostly all "copy & paste" code. This exposes your bot to the Functions HTTP Trigger
-var listen = bot.listen();
-
-var response = function (context) {
-    return {
-        send: function (status, message) {
-            var _msg = message ? message : (typeof status !== 'number' ? status : null)
-            var _status = typeof status === 'number' ? status : 200
-            var res = {
-                status: _status,
-                body: _msg
-            };
-            context.res = res;
-            context.done();
-        }
-    }
-}
-
-module.exports = function (context, req) {
-    listen(req, response(context))
+if (useEmulator) {
+    var restify = require('restify');
+    var server = restify.createServer();
+    server.listen(3978, function() {
+        console.log('test bot endpont at http://localhost:3978/api/messages');
+    });
+    server.post('/api/messages', connector.listen());    
+} else {
+    module.exports = connector.listen();
 }
