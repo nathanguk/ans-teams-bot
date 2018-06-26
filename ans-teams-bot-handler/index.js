@@ -1,9 +1,10 @@
 "use strict";
 var builder = require("botbuilder");
 var botbuilder_azure = require("botbuilder-azure");
+var teams = require("botbuilder-teams");
 var path = require('path');
 
-var useEmulator = (process.env.NODE_ENV == 'development');
+
 
 var connector = new botbuilder_azure.BotServiceConnector({
     appId: process.env['MicrosoftAppId'],
@@ -22,8 +23,7 @@ bot.set('storage', tableStorage);
 
 bot.dialog('/', [
     function (session) {
-        context.log("echo");
-        context.log(session);
+        context.log(session.message);
         builder.Prompts.text(session, "Hello... What's your name?");
     },
     function (session, results) {

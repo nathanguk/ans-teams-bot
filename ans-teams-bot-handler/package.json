@@ -5,7 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "botbuilder": "*",
-    "botbuilder-azure": "*"
+    "botbuilder-azure": "*",
+    "botbuilder-teams": "^0.2.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
