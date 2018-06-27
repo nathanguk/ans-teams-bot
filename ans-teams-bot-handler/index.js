@@ -27,6 +27,7 @@ bot.dialog('/', [
     },
     function (session, results) {
         session.userData.name = results.response;
+        testOutput(results.response);
         builder.Prompts.number(session, "Hi " + results.response + ", How many years have you been coding?"); 
     },
     function (session, results) {
@@ -40,6 +41,11 @@ bot.dialog('/', [
                     " years and use " + session.userData.language + ".");
     }
 ]);
+
+function testOutput(input) {
+    context.log("testOutput Called");
+    context.log(input);
+};
 
 module.exports = connector.listen();
 
