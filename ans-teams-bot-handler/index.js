@@ -65,7 +65,7 @@ bot.dialog('/', [
 bot.library(require('./dialogs/create-both'));
 
 //Validators
-bot.library(require('./validators'));
+//bot.library(require('./validators'));
 
 
 module.exports = connector.listen();
