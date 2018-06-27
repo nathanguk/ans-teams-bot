@@ -1,7 +1,9 @@
 "use strict";
 var builder = require("botbuilder");
 var botbuilder_azure = require("botbuilder-azure");
-var teams = require("botbuilder-teams");
+
+var test = require("./module.js");
+
 var path = require('path');
 
 
@@ -27,7 +29,7 @@ bot.dialog('/', [
     },
     function (session, results) {
         session.userData.name = results.response;
-        testOutput(results.response);
+        test.testModule()
         builder.Prompts.number(session, "Hi " + results.response + ", How many years have you been coding?"); 
     },
     function (session, results) {
@@ -41,11 +43,6 @@ bot.dialog('/', [
                     " years and use " + session.userData.language + ".");
     }
 ]);
-
-function testOutput(input) {
-    context.log("testOutput Called");
-    context.log(input);
-};
 
 module.exports = connector.listen();
 
