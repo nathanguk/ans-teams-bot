@@ -4,7 +4,7 @@ var botbuilder_azure = require("botbuilder-azure");
 
 var path = require('path');
 
-var library = new builder.library('createBoth');
+var library = new builder.Library('createBoth');
 
 var yes = "Yes";
 var no = "No";
