@@ -43,6 +43,7 @@ library.dialog('/', [
             switch (results.response.entity) {
                 case yes:
                     session.send('Ok, Im going to create your new customer and project now!');
+                    context.log('test');
                     session.endDialogWithResult({ resumed: builder.ResumeReason.completed });
                     break;
                 case no:
@@ -54,11 +55,9 @@ library.dialog('/', [
             session.send('Im sorry but I didnt understand, please try again!');
         }
     },   
-
-
     function (session, results) {
         if (result.resume) {
-            session.send('You identity was not verified and your password cannot be reset');
+            session.send('Im sorry but I didnt understand, please try again!');
             session.reset();
         }
     }

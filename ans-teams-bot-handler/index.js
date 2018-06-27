@@ -47,17 +47,16 @@ bot.dialog('/', [
                 case createBoth:
                     session.beginDialog('createBoth:/');
                     break;                 
-            }
+            };
         } else {
             session.send('Im sorry but I didnt understand, please select one of the options');
-        }
+        };
     },    
-
     function (session, results) {
-        if (result.resume) {
+        if (results.resume) {
             session.send('I was unable to complete your request, try again!');
             session.reset();
-        }
+        };
     }
 ]);
 
