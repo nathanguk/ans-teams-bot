@@ -1,8 +1,6 @@
-"use strict";
-var builder = require("botbuilder");
-var botbuilder_azure = require("botbuilder-azure");
-
-var test = require("./module.js");
+//"use strict";
+var builder = require('botbuilder');
+var botbuilder_azure = require('botbuilder-azure');
 
 var path = require('path');
 
@@ -29,7 +27,7 @@ bot.set('storage', tableStorage);
 
 bot.dialog('/', [
     function (session) {
-        builder.Prompts.choice(session, "What would you like to do?", 
+        builder.Prompts.choice(session, 'What would you like to do?', 
         [createCustomer, createProject, createBoth],
         { listStyle: builder.ListStyle.button });
     },
