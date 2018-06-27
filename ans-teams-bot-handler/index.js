@@ -19,9 +19,9 @@ var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
 var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azureTableClient);
 
-const createCustomer = 'Create Customer';
-const createProject = 'Create Both';
-const createBoth = 'Create Both';
+var createCustomer = 'Create Customer';
+var createProject = 'Create Project';
+var createBoth = 'Create Both';
 
 var bot = new builder.UniversalBot(connector);
 bot.localePath(path.join(__dirname, './locale'));
@@ -34,21 +34,39 @@ bot.dialog('/', [
         { listStyle: builder.ListStyle.button });
     },
     function (session, results) {
-        session.userData.name = results.response;
-        test.testModule()
-        builder.Prompts.number(session, "Hi " + results.response + ", How many years have you been coding?"); 
-    },
+        if (results.response) {
+            switch (results.response.entity) {
+                case createCustomer:
+                    session.send('This functionality is not yet implemented! Try Create Both.');
+                    session.reset();
+                    break;
+                case createProject:
+                    session.send('This functionality is not yet implemented! Try Create Both.');
+                    session.reset();  
+                    break;
+                case createBoth:
+                    session.beginDialog('createBoth:/');
+                    break;                 
+            }
+        } else {
+            session.send('Im sorry but I didnt understand, please select one of the options');
+        }
+    },    
+
     function (session, results) {
-        session.userData.coding = results.response;
-        builder.Prompts.choice(session, "What language do you code Node using?", ["JavaScript", "CoffeeScript", "TypeScript"]);
-    },
-    function (session, results) {
-        session.userData.language = results.response.entity;
-        session.send("Got it... " + session.userData.name + 
-                    " you've been programming for " + session.userData.coding + 
-                    " years and use " + session.userData.language + ".");
+        if (result.resume) {
+            session.send('I was unable to complete your request, try again!');
+            session.reset();
+        }
     }
 ]);
+
+//Sub-Dialogs
+bot.library(require('./dialogs/create-both'));
+
+//Validators
+bot.library(require('./validators'));
+
 
 module.exports = connector.listen();
 
