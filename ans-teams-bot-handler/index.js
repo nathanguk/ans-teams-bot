@@ -19,13 +19,19 @@ var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
 var tableStorage = new botbuilder_azure.AzureBotStorage({ gzipData: false }, azureTableClient);
 
+const createCustomer = 'Create Customer';
+const createProject = 'Create Both';
+const createBoth = 'Create Both';
+
 var bot = new builder.UniversalBot(connector);
 bot.localePath(path.join(__dirname, './locale'));
 bot.set('storage', tableStorage);
 
 bot.dialog('/', [
     function (session) {
-        builder.Prompts.text(session, "Hello... What's your name?");
+        builder.Prompts.choice(session, "What would you like to do?", 
+        [createCustomer, createProject, createBoth],
+        { listStyle: builder.ListStyle.button });
     },
     function (session, results) {
         session.userData.name = results.response;
