@@ -27,7 +27,8 @@ bot.set('storage', tableStorage);
 
 bot.dialog('/', [
     function (session) {
-        builder.Prompts.choice(session, 'What would you like to do?', 
+        context.log("test");
+        builder.Prompts.choice(session, 'Hi ' + session.message.user.name + ', What would you like to do?', 
         [createCustomer, createProject, createBoth],
         { listStyle: builder.ListStyle.button });
     },
@@ -64,6 +65,11 @@ bot.library(require('./dialogs/create-both'));
 //Validators
 //bot.library(require('./validators'));
 
+var listener = connector.listen();
+var withLogging = function(context, req) {
+    listener(context, req);
+}
 
-module.exports = connector.listen();
+//module.exports = connector.listen();
 
+module.exports = { default: withLogging }
