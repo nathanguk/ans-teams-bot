@@ -67,7 +67,7 @@ bot.library(require('./dialogs/create-both'));
 
 module.exports = function (context, req) {
     context.log("Passing body", req.body);
-    listener(req, context.res);
+    listener(context, req);
 }
 
 //module.exports = connector.listen();
