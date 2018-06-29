@@ -27,7 +27,6 @@ bot.set('storage', tableStorage);
 
 bot.dialog('/', [
     function (session) {
-        context.log("test");
         builder.Prompts.choice(session, 'Hi ' + session.message.user.name + ', What would you like to do?', 
         [createCustomer, createProject, createBoth],
         { listStyle: builder.ListStyle.button });
@@ -71,7 +70,7 @@ module.exports = function (context, req) {
     context.log("Message: ", req.body.text);
 
     listener(context, req);
-}
+};
 
 //module.exports = connector.listen();
 
