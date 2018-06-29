@@ -26,7 +26,7 @@ bot.localePath(path.join(__dirname, './locale'));
 bot.set('storage', tableStorage);
 
 bot.dialog('/', [
-    function (context, session) {
+    function (session) {
         context.log("test");
         builder.Prompts.choice(session, 'Hi ' + session.message.user.name + ', What would you like to do?', 
         [createCustomer, createProject, createBoth],
@@ -66,7 +66,10 @@ bot.library(require('./dialogs/create-both'));
 //bot.library(require('./validators'));
 
 module.exports = function (context, req) {
-    context.log("Passing body", req.body);
+    context.log("Tenant Id: ", req.body.channelData.tenant.id);
+    context.log("User Id: ", req.body.from.id);
+    context.log("Message: ", req.body.text);
+
     listener(context, req);
 }
 
