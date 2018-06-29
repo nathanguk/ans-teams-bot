@@ -27,7 +27,7 @@ bot.set('storage', tableStorage);
 
 bot.dialog('/', [
     function (session) {
-        console.log("Session: " + session);
+        console.log("Main Dialog");
         builder.Prompts.choice(session, 'Hi ' + session.message.user.name + ', What would you like to do?', 
         [createCustomer, createProject, createBoth],
         { listStyle: builder.ListStyle.button });
