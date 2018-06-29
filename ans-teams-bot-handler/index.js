@@ -5,7 +5,6 @@ var botbuilder_azure = require('botbuilder-azure');
 var path = require('path');
 
 
-
 var connector = new botbuilder_azure.BotServiceConnector({
     appId: process.env['MicrosoftAppId'],
     appPassword: process.env['MicrosoftAppPassword'],
@@ -65,11 +64,5 @@ bot.library(require('./dialogs/create-both'));
 //Validators
 //bot.library(require('./validators'));
 
-var listener = connector.listen();
-var withLogging = function(context, req) {
-    listener(context, req);
-}
+module.exports = connector.listen();
 
-//module.exports = connector.listen();
-
-module.exports = { default: withLogging }
