@@ -27,6 +27,7 @@ bot.set('storage', tableStorage);
 
 bot.dialog('/', [
     function (session) {
+        console.log("Session: " + session);
         builder.Prompts.choice(session, 'Hi ' + session.message.user.name + ', What would you like to do?', 
         [createCustomer, createProject, createBoth],
         { listStyle: builder.ListStyle.button });
@@ -65,6 +66,8 @@ bot.library(require('./dialogs/create-both'));
 //bot.library(require('./validators'));
 
 module.exports = function (context, req) {
+    console.log = context.log;
+
     context.log("Tenant Id: ", req.body.channelData.tenant.id);
     context.log("User Id: ", req.body.from.id);
     context.log("Message: ", req.body.text);
