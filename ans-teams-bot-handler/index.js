@@ -11,6 +11,7 @@ var connector = new botbuilder_azure.BotServiceConnector({
     openIdMetadata: process.env['BotOpenIdMetadata']
 });
 
+var listener = connector.listen();
 
 var tableName = 'botdata';
 var azureTableClient = new botbuilder_azure.AzureTableClient(tableName, process.env['AzureWebJobsStorage']);
@@ -64,5 +65,10 @@ bot.library(require('./dialogs/create-both'));
 //Validators
 //bot.library(require('./validators'));
 
-module.exports = connector.listen();
+module.exports = function (context, req) {
+    context.log("Passing body", req.body);
+    listener(req, context.res);
+}
+
+//module.exports = connector.listen();
 
