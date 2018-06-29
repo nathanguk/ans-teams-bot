@@ -42,7 +42,10 @@ library.dialog('/', [
         if (results.response) {
             switch (results.response.entity) {
                 case yes:
-                    console.log("Creating Customer an Project");
+                    console.log("Creating Customer and Project");
+                    
+                    //****************** Insert external call here *********************
+                    
                     session.send('Ok, Im going to create your new customer and project now!');
                     session.endDialogWithResult({ resumed: builder.ResumeReason.completed });
                     break;
