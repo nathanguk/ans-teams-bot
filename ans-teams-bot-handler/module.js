@@ -1,3 +1,3 @@
 exports.testModule = function () {
-            context.log("test");
+    console.log("test module");
 };

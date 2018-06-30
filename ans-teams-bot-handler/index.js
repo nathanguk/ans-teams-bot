@@ -2,6 +2,8 @@
 var builder = require('botbuilder');
 var botbuilder_azure = require('botbuilder-azure');
 
+var module = require('./module.js');
+
 var path = require('path');
 
 
