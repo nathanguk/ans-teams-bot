@@ -2,6 +2,8 @@
 var builder = require('botbuilder');
 var botbuilder_azure = require('botbuilder-azure');
 
+var modules = require('./module.js');
+
 var path = require('path');
 
 var library = new builder.Library('createBoth');
@@ -45,6 +47,7 @@ library.dialog('/', [
                     console.log("Creating Customer and Project");
                     
                     //****************** Insert external call here *********************
+                    modules.testModule();
                     
                     session.send('Ok, Im going to create your new customer and project now!');
                     session.endDialogWithResult({ resumed: builder.ResumeReason.completed });
