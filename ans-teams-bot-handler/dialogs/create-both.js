@@ -2,7 +2,7 @@
 var builder = require('botbuilder');
 var botbuilder_azure = require('botbuilder-azure');
 
-var modules = require('./../module.js');
+var modules = require('../gitModule');
 
 var path = require('path');
 
@@ -10,12 +10,15 @@ var library = new builder.Library('createBoth');
 
 var yes = 'Yes';
 var no = 'No';
+var customer ='';
+var project = '';
 
 library.dialog('/', [
     function (session) {
         builder.Prompts.text(session, 'What is the customers name?');
     },
     function (session, results) {
+        customer = results.response;
         builder.Prompts.choice(session, 'Is "' + results.response + '" correct?', 
         [yes, no],
         { listStyle: builder.ListStyle.button });
@@ -36,6 +39,7 @@ library.dialog('/', [
         }
     },    
     function (session, results) {
+        project = results.response;
         builder.Prompts.choice(session, 'Is "' + results.response + '" correct?', 
         [yes, no],
         { listStyle: builder.ListStyle.button });
@@ -43,13 +47,11 @@ library.dialog('/', [
     function (session, results) {
         if (results.response) {
             switch (results.response.entity) {
-                case yes:
-                    console.log("Creating Customer and Project");
-                    
+                case yes:                  
                     //****************** Insert external call here *********************
-                    modules.testModule();
+                    modules.testModule(customer,project);
                     
-                    session.send('Ok, Im going to create your new customer and project now!');
+                    session.send('Ok, request to create your new customer and project sent!');
                     session.endDialogWithResult({ resumed: builder.ResumeReason.completed });
                     break;
                 case no:
